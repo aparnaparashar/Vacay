@@ -10,6 +10,9 @@ from contextlib import asynccontextmanager
 from app.config import settings
 from app.api import chat, destinations, itinerary, weather, health, logistics, orchestration, trips, explore, maps, users, vacay, files, travel_guide
 from app.db.database import engine, Base
+# Imported for its side effect: every model must be registered on Base.metadata
+# before create_all() runs, including the chat tables.
+from app.db import models as _models  # noqa: F401
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

@@ -143,14 +143,20 @@ export async function fetchTravelGuide(
     return cached.data;
   }
 
+  // Nothing to do if this caller already went away.
+  if (signal?.aborted) return null;
+
   const existing = inFlight.get(key);
   if (existing) return existing;
 
   const request = (async (): Promise<TravelGuideData | null> => {
     try {
+      // Deliberately not tied to `signal`: the request is shared between
+      // callers, so one unmounting badge (or React's double-mount in dev) must
+      // not abort the fetch everyone else is awaiting. Callers already drop
+      // late results via their own `active` flag.
       const res = await fetch(
         `${API_BASE}/api/travel-guide/?country=${encodeURIComponent(destination)}`,
-        { signal },
       );
       if (!res.ok) return null;
 

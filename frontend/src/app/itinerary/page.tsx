@@ -71,6 +71,7 @@ export default function ItineraryPage() {
   const [routeProfile, setRouteProfile] = useState<RouteProfile>('driving');
   const [showRoute, setShowRoute] = useState(true);
   const [undoHistory, setUndoHistory] = useState<Record<number, any[]>>({});
+  const [destinationCoords, setDestinationCoords] = useState<{ lat: number; lng: number } | null>(null);
 
   // Maps Search State
   const [searchQuery, setSearchQuery] = useState("");
@@ -120,6 +121,41 @@ export default function ItineraryPage() {
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery]);
+
+  // Geocode this trip's destination so the map has a correct centre even when
+  // no activity carries coordinates yet.
+  useEffect(() => {
+    const destination = tripData.destination?.trim();
+    if (!destination) {
+      setDestinationCoords(null);
+      return;
+    }
+
+    let active = true;
+    setDestinationCoords(null);
+
+    (async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000"}/api/maps/search`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: destination })
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const match = (data.results || [])[0];
+        const dLat = Number(match?.latitude);
+        const dLng = Number(match?.longitude);
+        if (active && !isNaN(dLat) && !isNaN(dLng) && (dLat !== 0 || dLng !== 0)) {
+          setDestinationCoords({ lat: dLat, lng: dLng });
+        }
+      } catch (err) {
+        console.error("Failed to geocode destination", err);
+      }
+    })();
+
+    return () => { active = false; };
+  }, [tripData.destination]);
 
   const handleAddPlace = (place: any) => {
     if (!tripData.itinerary || !tripData.itinerary.days || tripData.itinerary.days.length === 0) {
@@ -344,10 +380,10 @@ export default function ItineraryPage() {
     toast.success("Reverted to previous order.");
   };
 
-  let lat = 18.995; // Default Mumbai for testing if none found
-  let lng = 72.825;
+  let firstLat: number | null = null;
+  let firstLng: number | null = null;
   const aiMarkers: any[] = [];
-  
+
   // Find first valid coordinates and collect all markers for the ROUTE day
   const currentDay = days[routeDayIndex];
   if (currentDay?.activities) {
@@ -357,9 +393,9 @@ export default function ItineraryPage() {
         const mLat = Number(loc.latitude || loc.lat);
         const mLng = Number(loc.longitude || loc.lng);
         if (!isNaN(mLat) && !isNaN(mLng)) {
-          if (lat === 18.995) {
-            lat = mLat;
-            lng = mLng;
+          if (firstLat === null) {
+            firstLat = mLat;
+            firstLng = mLng;
           }
           aiMarkers.push({
             lat: mLat,
@@ -373,6 +409,11 @@ export default function ItineraryPage() {
     }
   }
 
+  // Map centre: this trip's own coordinates only — the first activity with
+  // real coordinates, otherwise the geocoded trip destination.
+  const lat = firstLat ?? destinationCoords?.lat ?? null;
+  const lng = firstLng ?? destinationCoords?.lng ?? null;
+
   // Fetch weather data for the timeline
   useEffect(() => {
     const fetchWeather = async () => {
@@ -384,7 +425,7 @@ export default function ItineraryPage() {
         console.error("Failed to fetch weather for timeline", e);
       }
     };
-    if (days.length > 0) fetchWeather();
+    if (days.length > 0 && lat !== null && lng !== null) fetchWeather();
   }, [lat, lng, days.length]);
 
   const getMaterialIcon = (condition: string) => {
@@ -428,14 +469,16 @@ export default function ItineraryPage() {
       
       {/* Background Map */}
       <div className="absolute inset-0 z-0">
-        <DynamicMap 
-          lat={lat} 
-          lng={lng} 
-          destination={tripData.destination || "Tokyo"} 
-          aiMarkers={aiMarkers}
-          routeCoordinates={showRoute ? route?.coordinates ?? null : null}
-          routeLegs={showRoute ? route?.legs ?? null : null}
-        />
+        {lat !== null && lng !== null && (
+          <DynamicMap
+            lat={lat}
+            lng={lng}
+            destination={tripData.destination || "Destination"}
+            aiMarkers={aiMarkers}
+            routeCoordinates={showRoute ? route?.coordinates ?? null : null}
+            routeLegs={showRoute ? route?.legs ?? null : null}
+          />
+        )}
       </div>
 
       {/* Floating UI Container */}
@@ -642,7 +685,7 @@ export default function ItineraryPage() {
       </div>
         
         {/* Floating Weather Widget */}
-        {weatherDayIndex !== null && (
+        {weatherDayIndex !== null && lat !== null && lng !== null && (
           <div className="pointer-events-auto absolute bottom-6 left-[396px] right-[376px] flex justify-center z-50">
             <WeatherWidget 
               dayIndex={weatherDayIndex}

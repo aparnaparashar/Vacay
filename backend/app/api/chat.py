@@ -1,9 +1,24 @@
 import json
-from fastapi import APIRouter
+import logging
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from typing import List, Optional
 from groq import Groq
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.auth.dependencies import get_current_user
 from app.config import settings
+from app.db.database import get_db
+from app.db.models import User
+from app.models.schemas import (
+    ChatHistoryMessage,
+    ChatHistoryResponse,
+    VacayChatRequest,
+    VacayChatResponse,
+)
+from app.services.chat_service import ChatQuotaError, chat_service
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -25,7 +40,69 @@ class IntakeData(BaseModel):
     budget: Optional[float] = Field(None, description="Total budget in USD")
     missing_field: Optional[str] = Field(None, description="If is_complete is False, specify one primary missing field: 'origin', 'destination', 'dates', 'adults', or 'budget'. This tells the UI to show a widget.")
 
-SYSTEM_PROMPT = """You are Wandr AI, a friendly and expert travel agent. 
+@router.post("/", response_model=VacayChatResponse)
+async def vacay_chat(
+    request: VacayChatRequest,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Vacay Chatbot — conversational travel assistant (spec Section 15).
+
+    Handles recommendations, day planning, weather-aware suggestions and live
+    travel Q&A. Gemini's function calling routes each query to the right tool.
+    """
+    try:
+        return await chat_service.process_message(
+            db=db,
+            user_id=current_user.id,
+            message=request.message,
+            conversation_id=request.conversation_id,
+            trip_context=request.trip_context,
+            current_location=request.current_location,
+        )
+    except ChatQuotaError as e:
+        # A single turn can span several model requests, so a low per-minute
+        # quota is hit routinely. Tell the traveller plainly instead of
+        # pretending something broke.
+        raise HTTPException(
+            status_code=429,
+            detail="WANDR is at its request limit right now. Give it a few seconds and ask again.",
+        ) from e
+    except Exception as e:
+        logger.exception("Vacay chat failed for user %s", current_user.id)
+        # Don't leak provider/internal detail to the client.
+        raise HTTPException(
+            status_code=503,
+            detail="WANDR is having trouble answering right now. Please try again.",
+        ) from e
+
+
+@router.get("/conversations/{conversation_id}", response_model=ChatHistoryResponse)
+async def get_conversation(
+    conversation_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Replay a stored conversation so chat survives a page refresh."""
+    records = await chat_service.get_history(db, current_user.id, conversation_id)
+    return ChatHistoryResponse(
+        conversation_id=conversation_id,
+        messages=[
+            ChatHistoryMessage(
+                id=r.id,
+                role=r.role,
+                content=r.content or "",
+                intent=r.intent,
+                sources=r.sources or [],
+                created_at=r.created_at.isoformat() if r.created_at else None,
+            )
+            for r in records
+        ],
+    )
+
+
+SYSTEM_PROMPT = """You are Wandr AI, a friendly and expert travel agent.
 Your goal is to gather the following REQUIRED parameters to plan a trip:
 1. Origin (where are they leaving from?)
 2. Destination (where are they going?)

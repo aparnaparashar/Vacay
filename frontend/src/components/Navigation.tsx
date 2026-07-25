@@ -7,12 +7,14 @@ import { useAuth as useCustomAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { SignInButton, Show, UserButton } from "@clerk/nextjs";
+import WandrChat from "@/components/WandrChat";
 
 export function TopNav() {
   const pathname = usePathname();
   const { tripData } = useTripData();
   const { isAuthenticated } = useCustomAuth(); // Note: This will be replaced by Clerk later
   const [profileOpen, setProfileOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
 
   // Hide TopNav completely on auth pages
   if (pathname === "/login" || pathname === "/signup") {
@@ -52,7 +54,9 @@ export function TopNav() {
     ];
 
     return (
-      <div className="fixed top-0 left-0 right-0 z-50 bg-[#F8F9FA]">
+      <>
+      {/* Above the chat backdrop (z-90) so the Chat toggle stays clickable. */}
+      <div className="fixed top-0 left-0 right-0 z-[95] bg-[#F8F9FA]">
         {/* Top Header */}
         <header className="h-14 border-b border-gray-200 flex items-center justify-between px-4">
           {/* Left: Logo & Title */}
@@ -128,9 +132,30 @@ export function TopNav() {
                 </Link>
               );
             })}
+
+            {/* Chat is a panel toggle, not a route — hence a button. */}
+            <button
+              type="button"
+              onClick={() => setChatOpen((open) => !open)}
+              aria-expanded={chatOpen}
+              className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold transition-all ${
+                chatOpen
+                  ? "bg-[#E67E22] text-white shadow-sm"
+                  : "text-gray-500 hover:text-black hover:bg-gray-100"
+              }`}
+            >
+              <span className="material-symbols-outlined text-[18px]">chat_bubble</span>
+              Chat
+            </button>
           </nav>
         </div>
       </div>
+      {/* The drawer opens below the 104px trip header so the header — and the
+          Chat toggle in it — is never covered by the panel. */}
+      <div className="chat-below-header">
+        <WandrChat isOpen={chatOpen} onClose={() => setChatOpen(false)} />
+      </div>
+      </>
     );
   }
 
@@ -167,6 +192,7 @@ export function TopNav() {
             </Link>
           );
         })}
+        {/* No Chat entry here — chat lives only in the trip sub-nav. */}
       </nav>
 
       {/* Right Controls */}

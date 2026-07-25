@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from datetime import date, datetime, time
 from enum import Enum
-from typing import Optional
+from typing import Any, Optional
 
 from pydantic import BaseModel, Field
 
@@ -235,3 +235,105 @@ class ItineraryRefineRequest(BaseModel):
     """Request to refine an existing itinerary."""
     itinerary: Itinerary
     instruction: str = Field(..., description="What to change, e.g. 'add more food stops on day 2'")
+
+
+# ──────────────────────────────────────────────
+# Vacay Chatbot
+# ──────────────────────────────────────────────
+
+class GeoLocation(BaseModel):
+    """A user's current coordinates."""
+    latitude: float = Field(..., ge=-90, le=90)
+    longitude: float = Field(..., ge=-180, le=180)
+
+
+class TripContextPayload(BaseModel):
+    """
+    Full active-trip snapshot sent by the frontend with every chat message.
+
+    Mirrors the client-side TripContext so the assistant knows the whole trip
+    without the user having to re-explain anything. Every field is optional so
+    a partially built trip still works.
+    """
+    trip_id: Optional[int] = None
+    origin: Optional[str] = None
+    destination: Optional[str] = None
+    departure_date: Optional[str] = None
+    arrival_date: Optional[str] = None
+    adults: Optional[int] = None
+    budget: Optional[float] = None
+    weather: Optional[Any] = None
+    flights: Optional[Any] = None
+    hotels: Optional[Any] = None
+    itinerary: Optional[Any] = None
+    packing: Optional[Any] = None
+    budget_result: Optional[Any] = None
+    expenses: Optional[Any] = None
+    participants: Optional[Any] = None
+
+
+class TravellersContext(BaseModel):
+    type: Optional[str] = None   # solo | couple | family | group
+    count: Optional[int] = None
+
+
+class TripDatesContext(BaseModel):
+    start: Optional[str] = None
+    end: Optional[str] = None
+
+
+class BudgetContext(BaseModel):
+    currency: Optional[str] = None
+    daily_limit: Optional[float] = None
+    total: Optional[float] = None
+
+
+class TravelContext(BaseModel):
+    """Structured travel context maintained per conversation (spec Section 8)."""
+    destination: Optional[str] = None
+    country: Optional[str] = None
+    trip_dates: TripDatesContext = Field(default_factory=TripDatesContext)
+    travellers: TravellersContext = Field(default_factory=TravellersContext)
+    budget: BudgetContext = Field(default_factory=BudgetContext)
+    preferences: list[str] = Field(default_factory=list)
+    current_location: Optional[GeoLocation] = None
+    weather_context: Optional[Any] = None
+    visited_places: list[str] = Field(default_factory=list)
+
+
+class UserPreferences(BaseModel):
+    """Long-term traveller preferences (spec Section 7)."""
+    travel_style: Optional[str] = None
+    food_preferences: list[str] = Field(default_factory=list)
+    activity_preferences: list[str] = Field(default_factory=list)
+    travel_pace: Optional[str] = None
+
+
+class VacayChatRequest(BaseModel):
+    """Incoming message for the Vacay Chatbot (spec Section 15)."""
+    message: str = Field(..., min_length=1, max_length=4000)
+    conversation_id: Optional[str] = None
+    trip_context: Optional[TripContextPayload] = None
+    current_location: Optional[GeoLocation] = None
+
+
+class VacayChatResponse(BaseModel):
+    """Assistant reply (spec Section 15)."""
+    message: str
+    conversation_id: str
+    intent: str = "chat"
+    sources: list[str] = Field(default_factory=list)
+
+
+class ChatHistoryMessage(BaseModel):
+    id: str
+    role: str
+    content: str
+    intent: Optional[str] = None
+    sources: list[str] = Field(default_factory=list)
+    created_at: Optional[str] = None
+
+
+class ChatHistoryResponse(BaseModel):
+    conversation_id: str
+    messages: list[ChatHistoryMessage] = Field(default_factory=list)

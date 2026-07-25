@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, JSON, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, String, Float, DateTime, JSON, ForeignKey, Boolean, Text
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from app.db.database import Base
@@ -130,3 +130,63 @@ class FileLink(Base):
     reservation_id = Column(String, nullable=True)
 
     file = relationship("TripFile", back_populates="links")
+
+# --- Vacay Chatbot Models ---
+
+class ChatConversation(Base):
+    """Persistent conversation thread for the Vacay Chatbot."""
+    __tablename__ = "chat_conversations"
+
+    # UUID string so the client can hold a stable conversation_id.
+    id = Column(String, primary_key=True, index=True)
+    # NOTE: users.id and trips.id are Integer, so these FKs must be Integer too.
+    user_id = Column(Integer, ForeignKey("users.id"), index=True)
+    trip_id = Column(Integer, ForeignKey("trips.id"), nullable=True)
+
+    # Travel Context JSON (destination, dates, travellers, budget, preferences...)
+    travel_context = Column(JSON, default=dict)
+
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+    messages = relationship(
+        "ChatMessageRecord",
+        back_populates="conversation",
+        cascade="all, delete-orphan",
+    )
+
+
+class ChatMessageRecord(Base):
+    """A single chat message — conversation memory."""
+    __tablename__ = "chat_messages"
+
+    id = Column(String, primary_key=True, index=True)
+    conversation_id = Column(String, ForeignKey("chat_conversations.id"), index=True)
+    role = Column(String)  # "user" | "assistant"
+    content = Column(Text)
+    intent = Column(String, nullable=True)
+    sources = Column(JSON, nullable=True)
+
+    # Both messages of a turn are committed together and would otherwise share
+    # an identical created_at, leaving the random UUID id as the tiebreaker and
+    # scrambling the transcript. `seq` orders messages within a turn.
+    seq = Column(Integer, default=0)
+
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    conversation = relationship("ChatConversation", back_populates="messages")
+
+
+class UserPreference(Base):
+    """Long-term traveller preferences learned across conversations."""
+    __tablename__ = "user_preferences"
+
+    id = Column(String, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), unique=True, index=True)
+
+    travel_style = Column(String, nullable=True)   # backpacker | luxury | budget | ...
+    food_preferences = Column(JSON, default=list)  # ["vegetarian", "halal", ...]
+    activity_preferences = Column(JSON, default=list)  # ["history", "nature", ...]
+    travel_pace = Column(String, nullable=True)    # relaxed | balanced | fast-paced
+
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
