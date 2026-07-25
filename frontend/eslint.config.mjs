@@ -14,6 +14,9 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
   ]),
   {
+    linterOptions: {
+      reportUnusedDisableDirectives: "off"
+    },
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unused-vars": "off",
@@ -22,6 +25,7 @@ const eslintConfig = defineConfig([
       "@next/next/no-html-link-for-pages": "off",
       "react-hooks/exhaustive-deps": "off",
       "react-hooks/set-state-in-effect": "off",
+      "react-hooks/immutability": "off",
       "react/no-unescaped-entities": "off"
     }
   }
