@@ -1,6 +1,6 @@
-# WANDR
+# VACAY
 
-WANDR is a next-generation AI-powered travel planner that helps you effortlessly organize your vacations. From generating intelligent itineraries to splitting expenses and managing collaborative trips, WANDR acts as your smart co-pilot for exploring the world.
+VACAY is a next-generation AI-powered travel planner that helps you effortlessly organize your vacations. From generating intelligent itineraries to splitting expenses and managing collaborative trips, WANDR acts as your smart co-pilot for exploring the world.
 
 ## Screenshots
 
@@ -52,7 +52,7 @@ WANDR is a next-generation AI-powered travel planner that helps you effortlessly
 ### 1. Clone the repository
 ```bash
 git clone https://github.com/Aryankumar1729/Wondr.git
-cd Wondr
+cd VACAY
 ```
 
 ### 2. Frontend Setup
