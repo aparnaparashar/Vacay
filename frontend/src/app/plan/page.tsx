@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTripData } from "@/context/TripContext";
 import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
+import { ChatMessageText } from "@/components/ChatMessage";
 
 type ChatMessage = { role: 'user' | 'assistant', content: string };
 
@@ -284,7 +285,7 @@ export default function Home() {
                       ? 'bg-primary/90 text-white rounded-br-[4px] border-primary-container/30' 
                       : 'bg-white/80 text-gray-900 rounded-bl-[4px] border-white/50'
                   }`}>
-                    {msg.content}
+                    <ChatMessageText text={msg.content} role={msg.role} />
                   </div>
                 </div>
               ))}
