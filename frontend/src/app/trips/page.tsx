@@ -7,11 +7,13 @@ import { useAuth } from "@/context/AuthContext";
 import { SignInButton } from "@clerk/nextjs";
 import Link from "next/link";
 import InviteBuddyModal from "@/components/InviteBuddyModal";
+import TravelGuideBadge from "@/components/TravelGuideBadge";
 // TripCalendar removed since we use /vacation now
 
 export default function MyTripsDashboard() {
   const [trips, setTrips] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const [activeTrip, setActiveTrip] = useState<{ id: number; destination: string } | null>(null);
   const [activeTab, setActiveTab] = useState<"Planned" | "Completed" | "Archived">("Planned");
@@ -39,6 +41,7 @@ export default function MyTripsDashboard() {
         }
       } catch (err) {
         console.error("Error fetching trips:", err);
+        setError("Failed to connect to the server. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -310,7 +313,7 @@ export default function MyTripsDashboard() {
                     onClick={() => loadTrip(trip)}
                     className="bg-white rounded-[24px] shadow-sm border border-gray-100 overflow-hidden cursor-pointer hover:shadow-md transition-all duration-300 hover:-translate-y-1 group flex flex-col h-72"
                   >
-                    <div className={`flex-1 bg-gradient-to-br ${bgGradient} p-5 relative flex items-end`}>
+                    <div className={`flex-1 bg-gradient-to-br ${bgGradient} p-5 pt-14 relative flex flex-col justify-end gap-2.5`}>
                       <div className="absolute top-4 left-4 bg-white/20 backdrop-blur-md rounded-full px-3 py-1 flex items-center gap-1.5 border border-white/20">
                         <div className="w-1.5 h-1.5 rounded-full bg-yellow-300"></div>
                         <span className="text-[10px] font-bold text-white tracking-widest">{inDaysText}</span>
@@ -340,9 +343,14 @@ export default function MyTripsDashboard() {
                         </button>
                       </div>
 
-                      <h3 className="text-3xl font-bold text-white leading-tight tracking-tight shadow-sm z-10 w-3/4">
+                      <h3 className="text-3xl font-bold text-white leading-tight tracking-tight drop-shadow-sm z-10 w-3/4 truncate">
                         {trip.destination}
                       </h3>
+                      {/* Travel Guide badge sits in flow beneath the title so it
+                          never overlaps the title or the top action row. */}
+                      <div className="relative z-20 flex items-center">
+                        <TravelGuideBadge destination={trip.destination} />
+                      </div>
                     </div>
                     
                     <div className="h-32 p-5 flex flex-col justify-between">
