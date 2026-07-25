@@ -14,7 +14,8 @@ async def search_users(q: str, db: AsyncSession = Depends(get_db), current_user:
         return {"status": "success", "data": []}
         
     # Search by name or email (case-insensitive)
-    search_term = f"%{q.lower()}%"
+    escaped_q = q.lower().replace("%", "\\%").replace("_", "\\_")
+    search_term = f"%{escaped_q}%"
     result = await db.execute(
         select(User).where(
             (User.name.ilike(search_term)) | (User.email.ilike(search_term))

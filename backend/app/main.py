@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from app.config import settings
-from app.api import chat, destinations, itinerary, weather, health, logistics, orchestration, trips, explore, maps, users, vacay, files
+from app.api import chat, destinations, itinerary, weather, health, logistics, orchestration, trips, explore, maps, users, vacay, files, travel_guide
 from app.db.database import engine, Base
 
 @asynccontextmanager
@@ -59,6 +59,7 @@ app.include_router(vacay.router, prefix="/api/vacay", tags=["vacay"])
 app.include_router(explore.router, prefix="/api", tags=["explore"])
 app.include_router(maps.router, prefix="/api/maps", tags=["maps"])
 app.include_router(files.router, prefix="/api/trips/{trip_id}/files", tags=["files"])
+app.include_router(travel_guide.router, prefix="/api/travel-guide", tags=["travel-guide"])
 
 @app.get("/")
 async def root():

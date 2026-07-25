@@ -19,3 +19,4 @@ PyJWT[crypto]
 clerk-backend-api
 boto3
 python-multipart
+greenlet

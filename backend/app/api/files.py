@@ -28,6 +28,11 @@ s3_client = boto3.client(
     region_name='auto'  # R2 requires region_name='auto' or similar
 ) if S3_ENDPOINT else None
 
+import logging
+logger = logging.getLogger(__name__)
+if not s3_client:
+    logger.warning("R2_ENDPOINT_URL is not set. S3 uploads and downloads will be disabled.")
+
 async def verify_trip_access(trip_id: int, current_user: User, db: AsyncSession, require_edit: bool = False):
     access = await db.execute(select(TripMember).where(
         TripMember.trip_id == trip_id, 

@@ -18,6 +18,17 @@ class Settings(BaseSettings):
     duffel_api_key: str = Field(default="", alias="DUFFEL_API_KEY")
     foursquare_api_key: str = Field(default="", alias="FOURSQUARE_API_KEY")
     ola_maps_api_key: str = Field(default="", alias="OLA_MAPS_API_KEY")
+    tugo_api_key: str = Field(default="", alias="TUGO_API_KEY")
+    travel_risk_api_key: str = Field(default="", alias="TRAVEL_RISK_API_KEY")
+
+    # Travel Guide (TuGo + Travel Risk Intelligence)
+    tugo_api_base_url: str = Field(
+        default="https://api.tugo.com/v1/travelsafe/countries", alias="TUGO_API_BASE_URL"
+    )
+    travel_risk_api_base_url: str = Field(
+        default="https://travelriskapi.com/api/v1", alias="TRAVEL_RISK_API_BASE_URL"
+    )
+    travel_guide_cache_ttl_hours: int = Field(default=12, alias="TRAVEL_GUIDE_CACHE_TTL_HOURS")
 
     # Server
     host: str = Field(default="0.0.0.0", alias="HOST")
