@@ -31,7 +31,7 @@ const TypewriterText = ({ text, isNew, onUpdate }: { text: string; isNew?: boole
     return () => clearInterval(interval);
   }, [text, isNew, onUpdate]);
 
-  return <span>{displayedText}</span>;
+  return <span className="whitespace-pre-wrap break-words">{displayedText}</span>;
 };
 export function AICopilot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -168,7 +168,7 @@ export function AICopilot() {
                   {msg.role === 'assistant' ? (
                     <TypewriterText text={msg.content} isNew={msg.isNew} onUpdate={scrollToBottom} />
                   ) : (
-                    msg.content
+                    <div className="whitespace-pre-wrap break-words">{msg.content}</div>
                   )}
                 </div>
               </div>
