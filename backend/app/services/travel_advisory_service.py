@@ -67,7 +67,12 @@ class TugoAdvisoryService:
         base_url = settings.tugo_api_base_url.rstrip("/")
 
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
+            # Short timeout on purpose: TuGo is frequently unresponsive, and this
+            # call runs inside the travel-guide request the browser is awaiting.
+            # A long hang makes the endpoint take 10s+ and surfaces as "Failed to
+            # fetch" on the client. Fail fast and let the guide degrade to the
+            # Travel Risk data (the failure is negative-cached for 15 min).
+            async with httpx.AsyncClient(timeout=httpx.Timeout(4.0, connect=3.0)) as client:
                 resp = await client.get(
                     f"{base_url}/{country_code}",
                     headers={
