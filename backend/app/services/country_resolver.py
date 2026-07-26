@@ -71,7 +71,9 @@ COUNTRY_NAME_TO_ISO: dict[str, str] = {
     # U
     "uganda": "UG", "ukraine": "UA", "united arab emirates": "AE",
     "uae": "AE", "united kingdom": "GB", "uk": "GB",
-    "united states": "US", "usa": "US", "uruguay": "UY", "uzbekistan": "UZ",
+    "united states": "US", "usa": "US", "united states of america": "US",
+    "america": "US", "the united states": "US", "u.s.": "US", "u.s.a.": "US",
+    "uruguay": "UY", "uzbekistan": "UZ",
     # V
     "vietnam": "VN",
     # Z
