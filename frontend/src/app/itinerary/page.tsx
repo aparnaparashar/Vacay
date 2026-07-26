@@ -456,7 +456,7 @@ export default function ItineraryPage() {
 
   if (!itinerary || days.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-[calc(100dvh-104px)] text-center text-gray-500 mt-[104px]">
+      <div className="flex flex-col items-center justify-center h-[100dvh] text-center text-gray-500 pt-[104px]">
         <span className="material-symbols-outlined text-6xl mb-4 opacity-50">map</span>
         <h2 className="text-xl font-bold text-gray-700">No Itinerary Generated Yet</h2>
         <p className="text-sm mt-2">Go back and generate a trip first.</p>
@@ -465,7 +465,7 @@ export default function ItineraryPage() {
   }
 
   return (
-    <div className="relative h-[calc(100dvh-104px)] w-full overflow-hidden mt-[104px] bg-[#E5E3DF]">
+    <div className="relative h-[100dvh] w-full overflow-hidden bg-[#E5E3DF]">
       
       {/* Background Map */}
       <div className="absolute inset-0 z-0">
@@ -482,7 +482,7 @@ export default function ItineraryPage() {
       </div>
 
       {/* Floating UI Container */}
-      <div className="absolute inset-0 z-10 flex justify-between p-4 pointer-events-none gap-4">
+      <div className="absolute top-[104px] bottom-0 left-0 right-0 z-10 flex justify-between p-4 pointer-events-none gap-4">
         
         {/* Left Sidebar: Timeline (Floating) */}
         <div className="w-[380px] max-w-[calc(50%-8px)] shrink bg-white/95 backdrop-blur-xl flex flex-col rounded-[24px] shadow-2xl border border-white/60 overflow-hidden pointer-events-auto h-full">
