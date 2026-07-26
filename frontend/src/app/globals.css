@@ -66,7 +66,8 @@
 }
 
 body {
-  background-color: var(--color-background);
+  background: linear-gradient(135deg, #fcfaf8 0%, #f0e9e1 100%);
+  background-attachment: fixed;
   color: var(--color-on-surface);
   font-family: var(--font-plus-jakarta);
 }
@@ -109,7 +110,7 @@ body {
 
 /* ── WANDR Chat slide-out panel ─────────────────────────────────── */
 
-.wandr-chat-backdrop {
+.vacay-chat-backdrop {
   position: fixed;
   inset: 0;
   z-index: 90;
@@ -120,12 +121,12 @@ body {
   transition: opacity 0.28s ease, visibility 0.28s ease;
 }
 
-.wandr-chat-backdrop.open {
+.vacay-chat-backdrop.open {
   opacity: 1;
   visibility: visible;
 }
 
-.wandr-chat-panel {
+.vacay-chat-panel {
   position: fixed;
   top: 0;
   right: 0;
@@ -143,19 +144,19 @@ body {
   transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.3s;
 }
 
-.wandr-chat-panel.open {
+.vacay-chat-panel.open {
   transform: translateX(0);
   visibility: visible;
 }
 
 /* Trip pages have a 104px fixed header (56px bar + 48px sub-nav). The drawer
    starts below it so the Chat toggle in the sub-nav is never covered. */
-.chat-below-header .wandr-chat-panel {
+.chat-below-header .vacay-chat-panel {
   top: 104px;
 }
 
 @media (max-width: 640px) {
-  .wandr-chat-panel {
+  .vacay-chat-panel {
     width: 100vw;
     border-left: none;
   }
@@ -163,8 +164,8 @@ body {
 
 /* Users who prefer reduced motion get an instant show/hide. */
 @media (prefers-reduced-motion: reduce) {
-  .wandr-chat-panel,
-  .wandr-chat-backdrop {
+  .vacay-chat-panel,
+  .vacay-chat-backdrop {
     transition: none;
   }
 }

@@ -7,7 +7,7 @@ import { useAuth as useCustomAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { SignInButton, Show, UserButton } from "@clerk/nextjs";
-import WandrChat from "@/components/WandrChat";
+import VacayChat from "@/components/VacayChat";
 
 export function TopNav() {
   const pathname = usePathname();
@@ -65,7 +65,7 @@ export function TopNav() {
           {/* Left: Logo & Title */}
           <div className="flex items-center gap-3">
             <Link href="/trips" className="flex items-center transition-transform hover:scale-105">
-              <img src="/assets/logo.png" alt="WANDR" className="h-10 w-auto object-contain" />
+              <img src="/assets/logo.png" alt="Vacay" className="h-10 w-auto object-contain" />
             </Link>
             <div className="h-5 w-px bg-gray-300"></div>
             <span className="text-gray-900 font-bold text-base tracking-wide">
@@ -156,7 +156,7 @@ export function TopNav() {
       {/* The drawer opens below the 104px trip header so the header — and the
           Chat toggle in it — is never covered by the panel. */}
       <div className="chat-below-header">
-        <WandrChat isOpen={chatOpen} onClose={() => setChatOpen(false)} />
+        <VacayChat isOpen={chatOpen} onClose={() => setChatOpen(false)} />
       </div>
       </>
     );
@@ -170,7 +170,7 @@ export function TopNav() {
       {/* Logo */}
       <div className="flex items-center gap-2">
         <Link href="/" className="flex items-center">
-          <img src="/assets/logo.png" alt="WANDR" className="h-14 w-auto object-contain scale-110 origin-left" />
+          <img src="/assets/logo.png" alt="Vacay" className="h-14 w-auto object-contain scale-110 origin-left" />
         </Link>
       </div>
 

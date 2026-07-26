@@ -6,7 +6,7 @@ import { useAuth } from "@/context/AuthContext";
 import { SignInButton } from "@clerk/nextjs";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
-const CONVERSATION_STORAGE_KEY = "wandr_chat_conversation_id";
+const CONVERSATION_STORAGE_KEY = "Vacay_chat_conversation_id";
 
 interface ChatMessage {
   id: string;
@@ -18,13 +18,13 @@ interface ChatMessage {
   animate?: boolean;
 }
 
-interface WandrChatProps {
+interface VacayChatProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
 const GREETING =
-  "Hi — I'm WANDR. Ask me what to do today, where to eat, how to get somewhere, or how to spend a budget. If you have a trip loaded I already know the details.";
+  "Hi — I'm Vacay. Ask me what to do today, where to eat, how to get somewhere, or how to spend a budget. If you have a trip loaded I already know the details.";
 
 const SUGGESTIONS = [
   "What should I do today?",
@@ -66,7 +66,7 @@ function TypedText({ text, onTick }: { text: string; onTick: () => void }) {
   return <>{shown}</>;
 }
 
-export default function WandrChat({ isOpen, onClose }: WandrChatProps) {
+export default function VacayChat({ isOpen, onClose }: VacayChatProps) {
   const { tripData } = useTripData();
   const { token, isAuthenticated } = useAuth();
 
@@ -179,7 +179,7 @@ export default function WandrChat({ isOpen, onClose }: WandrChatProps) {
       setMessages((prev) => [...prev, { id: newId(), role: "user", content }]);
       setIsSending(true);
 
-      // The whole trip is sent so WANDR never has to ask about it.
+      // The whole trip is sent so Vacay never has to ask about it.
       const tripContext = tripData?.destination
         ? {
             trip_id: tripData.id ?? null,
@@ -216,7 +216,7 @@ export default function WandrChat({ isOpen, onClose }: WandrChatProps) {
         });
 
         if (!res.ok) {
-          let detail = "WANDR couldn't answer that just now. Please try again.";
+          let detail = "Vacay couldn't answer that just now. Please try again.";
           try {
             const body = await res.json();
             if (body?.detail) detail = body.detail;
@@ -241,7 +241,7 @@ export default function WandrChat({ isOpen, onClose }: WandrChatProps) {
           },
         ]);
       } catch {
-        setError("Couldn't reach WANDR. Check your connection and try again.");
+        setError("Couldn't reach Vacay. Check your connection and try again.");
       } finally {
         setIsSending(false);
       }
@@ -272,17 +272,17 @@ export default function WandrChat({ isOpen, onClose }: WandrChatProps) {
     <>
       {/* Backdrop */}
       <div
-        className={`wandr-chat-backdrop ${isOpen ? "open" : ""}`}
+        className={`Vacay-chat-backdrop ${isOpen ? "open" : ""}`}
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Panel */}
       <aside
-        className={`wandr-chat-panel ${isOpen ? "open" : ""}`}
+        className={`Vacay-chat-panel ${isOpen ? "open" : ""}`}
         role="dialog"
         aria-modal="true"
-        aria-label="WANDR Chat"
+        aria-label="Vacay Chat"
         aria-hidden={!isOpen}
       >
         {/* Header */}
@@ -291,7 +291,7 @@ export default function WandrChat({ isOpen, onClose }: WandrChatProps) {
             <span className="material-symbols-outlined text-[20px]">auto_awesome</span>
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-bold text-gray-900">WANDR Chat</p>
+            <p className="text-sm font-bold text-gray-900">Vacay Chat</p>
             <p className="truncate text-[11px] font-medium text-gray-500">
               {tripLabel ? `Trip to ${tripLabel}` : "Your travel companion"}
             </p>
@@ -325,7 +325,7 @@ export default function WandrChat({ isOpen, onClose }: WandrChatProps) {
             <div>
               <p className="text-base font-bold text-gray-900">Sign in to chat</p>
               <p className="mt-1 text-sm text-gray-500">
-                WANDR keeps your conversation and preferences with your account.
+                Vacay keeps your conversation and preferences with your account.
               </p>
             </div>
             <SignInButton mode="modal">
@@ -402,7 +402,7 @@ export default function WandrChat({ isOpen, onClose }: WandrChatProps) {
                 ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask WANDR anything..."
+                placeholder="Ask Vacay anything..."
                 disabled={isSending}
                 className="flex-1 rounded-full border border-gray-200 bg-[#F5F5F5] px-4 py-2.5 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-[#E67E22] focus:bg-white disabled:opacity-60"
               />
