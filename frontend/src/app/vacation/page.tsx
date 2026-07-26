@@ -30,7 +30,10 @@ export default function VacayPage() {
         const planRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000"}/api/vacay/plan`, {
           headers: { "Authorization": `Bearer ${token}` }
         });
-        if (!planRes.ok) throw new Error("Failed to load plan");
+        if (!planRes.ok) {
+          console.warn(`Failed to load plan, status: ${planRes.status}`);
+          return;
+        }
         const planData = await planRes.json();
         setPlan(planData.plan);
         setUsers(planData.users);
@@ -77,7 +80,7 @@ export default function VacayPage() {
           setTripDates(tDates);
         }
       } catch (e) {
-        console.error(e);
+        console.warn("Error fetching vacation data:", e);
       } finally {
         setLoading(false);
       }

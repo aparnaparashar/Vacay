@@ -4,6 +4,7 @@ import { TripProvider } from "@/context/TripContext";
 import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { SplashIntro } from "@/components/SplashIntro";
 
 export const metadata: Metadata = {
   title: "WANDR - AI Travel Planner",
@@ -28,11 +29,13 @@ export default function RootLayout({
           <Toaster position="bottom-right" toastOptions={{ style: { borderRadius: '12px', background: '#333', color: '#fff' } }} />
           <AuthProvider>
             <TripProvider>
-              <TopNav />
-              {/* Main Content */}
-              <main className="min-h-screen">
-                {children}
-              </main>
+              <SplashIntro>
+                <TopNav />
+                {/* Main Content */}
+                <main className="min-h-screen">
+                  {children}
+                </main>
+              </SplashIntro>
             </TripProvider>
           </AuthProvider>
         </ClerkProvider>

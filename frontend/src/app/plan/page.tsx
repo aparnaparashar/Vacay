@@ -244,17 +244,7 @@ export default function Home() {
   };
 
   return (
-    <div 
-      className="min-h-screen w-full relative -mt-[104px] pt-[104px]"
-      style={{ 
-        backgroundImage: 'url(/chat-bg.jpg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed'
-      }}
-    >
-      {/* Dark overlay to ensure text remains readable over bright wallpapers */}
-      <div className="absolute inset-0 bg-black/20 z-0 pointer-events-none"></div>
+    <div className="min-h-screen w-full relative -mt-[104px] pt-[104px] bg-transparent">
 
       <div className={`relative z-10 w-full flex gap-8 pt-12 px-8 pb-12 mx-auto ${(!itinerary && !loading) ? 'items-center justify-center min-h-[calc(100vh-104px)]' : 'flex-col xl:flex-row max-w-[1400px]'}`}>
       {/* Dynamic Content Column */}
@@ -263,16 +253,16 @@ export default function Home() {
         {/* Wandr AI Chat Interface */}
         {!itinerary && !loading && (
           <div 
-            className="rounded-[32px] shadow-[0_8px_40px_rgba(0,0,0,0.2)] border border-white/30 flex flex-col h-[600px] overflow-hidden relative group transition-all bg-white/10 backdrop-blur-2xl"
+            className="rounded-[32px] shadow-2xl shadow-gray-200/50 border border-gray-200 flex flex-col h-[600px] overflow-hidden relative group transition-all bg-white"
           >
             {/* Header */}
-            <div className="bg-white/60 backdrop-blur-lg p-6 border-b border-white/30 flex items-center gap-4 z-10">
-              <div className="w-12 h-12 rounded-full bg-primary/90 backdrop-blur-md flex items-center justify-center text-white shadow-md shrink-0 border border-white/20">
+            <div className="bg-white p-6 border-b border-gray-100 flex items-center gap-4 z-10">
+              <div className="w-12 h-12 rounded-full bg-[#E67E22] flex items-center justify-center text-white shadow-md shrink-0">
                 <span className="material-symbols-outlined text-2xl">auto_awesome</span>
               </div>
               <div>
-                <h2 className="text-xl font-black text-gray-900 drop-shadow-sm">Chat with Wandr AI</h2>
-                <p className="text-gray-700 font-medium text-sm drop-shadow-sm">Tell me where you want to go and I'll do the rest.</p>
+                <h2 className="text-xl font-black text-gray-900 drop-shadow-sm">Plan with Vacay</h2>
+                <p className="text-gray-500 font-medium text-sm drop-shadow-sm">Tell me where you want to go and I'll do the rest.</p>
               </div>
             </div>
 
@@ -280,10 +270,10 @@ export default function Home() {
             <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-transparent">
               {chatMessages.map((msg, idx) => (
                 <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[80%] rounded-[20px] p-4 text-sm font-medium leading-relaxed shadow-md backdrop-blur-md border ${
+                  <div className={`max-w-[80%] rounded-[20px] p-4 text-sm font-medium leading-relaxed shadow-sm border ${
                     msg.role === 'user' 
-                      ? 'bg-primary/90 text-white rounded-br-[4px] border-primary-container/30' 
-                      : 'bg-white/80 text-gray-900 rounded-bl-[4px] border-white/50'
+                      ? 'bg-[#E67E22] text-white rounded-br-[4px] border-[#d6711c]' 
+                      : 'bg-[#F9F9F9] text-gray-900 rounded-bl-[4px] border-gray-100'
                   }`}>
                     <ChatMessageText text={msg.content} role={msg.role} />
                   </div>
@@ -291,10 +281,10 @@ export default function Home() {
               ))}
               {isChatProcessing && (
                 <div className="flex justify-start">
-                  <div className="bg-white/80 backdrop-blur-md border border-white/50 text-gray-900 rounded-2xl rounded-bl-[4px] p-4 shadow-md flex gap-1.5 items-center">
-                    <span className="w-2 h-2 bg-primary rounded-full animate-bounce"></span>
-                    <span className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></span>
-                    <span className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></span>
+                  <div className="bg-[#F9F9F9] border border-gray-100 text-gray-900 rounded-2xl rounded-bl-[4px] p-4 shadow-sm flex gap-1.5 items-center">
+                    <span className="w-2 h-2 bg-[#E67E22] rounded-full animate-bounce"></span>
+                    <span className="w-2 h-2 bg-[#E67E22] rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></span>
+                    <span className="w-2 h-2 bg-[#E67E22] rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></span>
                   </div>
                 </div>
               )}
@@ -302,20 +292,20 @@ export default function Home() {
             </div>
 
             {/* Input Form */}
-            <form onSubmit={handleChatSubmit} className="p-4 bg-white/60 backdrop-blur-lg border-t border-white/30 flex gap-3 items-center z-10">
+            <form onSubmit={handleChatSubmit} className="p-4 bg-white border-t border-gray-100 flex gap-3 items-center z-10">
               <input 
                 type="text" 
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
                 placeholder="E.g., Plan a 3-day trip to Bali next week for a couple..."
-                className="flex-1 bg-white/70 hover:bg-white/90 focus:bg-white text-gray-900 placeholder:text-gray-500 border border-white/50 rounded-full px-6 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-inner transition-all font-medium"
+                className="flex-1 bg-[#F9F9F9] hover:bg-gray-50 focus:bg-white text-gray-900 placeholder:text-gray-400 border border-gray-200 rounded-full px-6 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-gray-300 transition-all font-medium"
                 disabled={isChatProcessing}
                 autoFocus
               />
               <button 
                 type="submit"
                 disabled={!chatInput.trim() || isChatProcessing}
-                className="w-12 h-12 shrink-0 rounded-full bg-primary/90 backdrop-blur-md border border-white/20 text-white flex items-center justify-center disabled:opacity-50 hover:bg-primary transition-all hover:scale-105 shadow-[0_4px_12px_rgba(0,0,0,0.15)] active:scale-95"
+                className="w-12 h-12 shrink-0 rounded-full bg-[#E67E22] text-white flex items-center justify-center disabled:opacity-50 hover:bg-[#d6711c] transition-all hover:scale-105 shadow-md active:scale-95"
               >
                 <span className="material-symbols-outlined">send</span>
               </button>
@@ -370,7 +360,7 @@ export default function Home() {
 
         {/* Results Stream */}
         {!loading && (flights.length > 0 || hotels.length > 0) && (
-          <div className="flex flex-col gap-8 animate-slide-up bg-white/30 backdrop-blur-2xl p-8 rounded-[32px] border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.15)]">
+          <div className="flex flex-col gap-8 animate-slide-up bg-white p-8 rounded-[32px] border border-gray-100 shadow-2xl shadow-gray-200/50">
             
             {flights.length > 0 && (
               <div>
@@ -436,7 +426,7 @@ export default function Home() {
 
         {/* Itinerary Timeline */}
         {!loading && itinerary && (
-          <div className="animate-slide-up mt-4 bg-white/30 backdrop-blur-2xl p-8 rounded-[32px] border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.15)]">
+          <div className="animate-slide-up mt-4 bg-white p-8 rounded-[32px] border border-gray-100 shadow-2xl shadow-gray-200/50">
             <h3 className="text-2xl font-black mb-8 text-gray-900 drop-shadow-sm border-b border-gray-900/10 pb-4">Daily Itinerary</h3>
             {itinerary.days?.map((day: any, i: number) => (
               <div key={i} className="mb-12">

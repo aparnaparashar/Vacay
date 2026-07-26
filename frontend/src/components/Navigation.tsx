@@ -7,6 +7,7 @@ import { useAuth as useCustomAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { SignInButton, Show, UserButton } from "@clerk/nextjs";
+import { motion } from "framer-motion";
 
 
 export function TopNav() {
@@ -64,7 +65,7 @@ export function TopNav() {
           {/* Left: Logo & Title */}
           <div className="flex items-center gap-3">
             <Link href="/trips" className="flex items-center transition-transform hover:scale-105">
-              <img src="/assets/logo.png" alt="Vacay" className="h-10 w-auto object-contain" />
+              <motion.img layoutId="nav-logo" src="/assets/logo.png" alt="Vacay" className="h-[48px] w-auto object-contain" />
             </Link>
             <div className="h-5 w-px bg-gray-300"></div>
             <span className="text-gray-900 font-bold text-base tracking-wide">
@@ -142,20 +143,18 @@ export function TopNav() {
     );
   }
 
-  // Global Header (My Trips, Vacay, Atlas)
-  const isHome = pathname === "/plan";
-
+  // Global Header is standard light-mode dashboard styling across all pages
   return (
-    <header className={`fixed top-0 left-0 right-0 h-16 flex items-center justify-between px-6 z-50 transition-colors duration-300 ${isHome ? 'bg-transparent border-transparent' : 'bg-white border-b border-gray-200'}`}>
+    <header className="fixed top-0 left-0 right-0 h-16 flex items-center justify-between px-6 z-50 transition-colors duration-300 bg-white border-b border-gray-200">
       {/* Logo */}
       <div className="flex items-center gap-2">
         <Link href="/" className="flex items-center">
-          <img src="/assets/logo.png" alt="Vacay" className="h-14 w-auto object-contain scale-110 origin-left" />
+          <motion.img layoutId="nav-logo" src="/assets/logo.png" alt="Vacay" className="h-[56px] w-auto object-contain" />
         </Link>
       </div>
 
       {/* Center Pill Nav */}
-      <nav className={`flex rounded-full p-1 transition-colors duration-300 ${isHome ? 'bg-white/20 backdrop-blur-md border border-white/30 shadow-sm' : 'bg-gray-50 border border-gray-200'}`}>
+      <nav className="flex rounded-full p-1 transition-colors duration-300 bg-gray-50 border border-gray-200">
         {globalNavLinks.map((link) => {
           const isActive = pathname === link.href;
           return (
@@ -164,8 +163,8 @@ export function TopNav() {
               href={link.href}
               className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
                 isActive
-                  ? isHome ? "bg-white text-gray-900 shadow-sm" : "bg-white text-black shadow-sm"
-                  : isHome ? "text-white/80 hover:text-white" : "text-gray-500 hover:text-black"
+                  ? "bg-gray-100 text-gray-900 shadow-sm"
+                  : "text-gray-500 hover:text-black"
               }`}
             >
               <span className="material-symbols-outlined text-[16px]">
@@ -179,9 +178,9 @@ export function TopNav() {
       </nav>
 
       {/* Right Controls */}
-      <div className={`flex items-center gap-4 transition-colors ${isHome ? 'text-white/90' : 'text-gray-500'}`}>
-        <button
-          className={`material-symbols-outlined text-[20px] transition-colors ${isHome ? 'hover:text-white' : 'hover:text-black'}`}
+      <div className="flex items-center gap-4 transition-colors text-gray-500">
+        <button 
+          className="material-symbols-outlined text-[20px] transition-colors hover:text-black"
           onClick={() => toast.success(tripData?.destination ? `${tripData.destination} trip is loaded.` : "No active trip loaded.")}
         >
           notifications

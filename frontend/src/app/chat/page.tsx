@@ -72,51 +72,58 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-gray-900 pt-28 pb-16 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent text-gray-900 pt-28 pb-16 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-10 rounded-4xl border border-slate-200 bg-white/90 p-8 shadow-lg shadow-slate-200/40 backdrop-blur-xl">
+        <div className="mb-10 rounded-[32px] bg-white border border-gray-100 p-8 shadow-2xl shadow-gray-200/50">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h1 className="text-4xl font-black tracking-tight">Wandr Chatbot</h1>
-              <p className="mt-3 max-w-2xl text-gray-600">Ask travel questions naturally and get personalized, context-aware recommendations powered by Wandr's AI assistant.</p>
+              <h1 className="text-4xl font-black tracking-tight drop-shadow-sm">Chat with Vacay AI</h1>
+              <p className="mt-3 max-w-2xl text-gray-500 font-medium text-sm">Ask travel questions naturally and get personalized, context-aware recommendations powered by Vacay's AI assistant.</p>
             </div>
-            <div className="rounded-3xl bg-slate-900/95 px-5 py-4 text-white shadow-md shadow-slate-900/20">
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-300">Try prompts like</p>
-              <ul className="mt-3 space-y-2 text-sm text-slate-200">
-                <li>What should I do in Kyoto if it rains?</li>
-                <li>Find affordable restaurants near me.</li>
-                <li>I have 5 hours before my train — what now?</li>
+            <div className="rounded-[24px] bg-[#E67E22] px-5 py-4 text-white shadow-lg">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-white/80">Try prompts like</p>
+              <ul className="mt-2 space-y-1.5 text-xs font-semibold text-white/95">
+                <li>• What should I do in Kyoto if it rains?</li>
+                <li>• Find affordable restaurants near me.</li>
+                <li>• I have 5 hours before my train — what now?</li>
               </ul>
             </div>
           </div>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-          <section className="rounded-4xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-200/50">
-            <div className="mb-6 flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold">Live Travel Chat</h2>
-                <p className="text-sm text-slate-500">Your conversational travel assistant is ready to help.</p>
+          <section className="rounded-[32px] bg-white border border-gray-100 shadow-2xl shadow-gray-200/50 p-6 flex flex-col h-[600px] overflow-hidden relative group transition-all">
+            <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#E67E22] flex items-center justify-center text-white shadow-md shrink-0">
+                  <span className="material-symbols-outlined text-[20px]">auto_awesome</span>
+                </div>
+                <div>
+                  <h2 className="text-lg font-black text-gray-900 drop-shadow-sm leading-tight">Live Travel Chat</h2>
+                  <p className="text-[11px] font-medium text-gray-500">Your conversational travel assistant is ready to help.</p>
+                </div>
               </div>
-              <span className="rounded-full bg-primary/10 px-3 py-1 text-primary text-sm font-semibold">Chat Only</span>
             </div>
 
-            <div className="mb-6 max-h-180 overflow-y-auto rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-inner" style={{ minHeight: '520px' }}>
-              <div className="space-y-4">
+            <div className="flex-1 overflow-y-auto space-y-6 pb-4 bg-transparent scrollbar-hide">
+              <div className="space-y-6">
                 {messages.map((message, index) => (
                   <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[80%] rounded-3xl px-5 py-4 text-sm leading-relaxed shadow-sm ${message.role === 'user' ? 'bg-primary text-white rounded-br-lg' : 'bg-white text-slate-900 rounded-bl-lg border border-slate-200'}`}>
+                    <div className={`max-w-[80%] rounded-[20px] p-4 text-sm font-medium leading-relaxed shadow-sm border ${
+                      message.role === 'user' 
+                        ? 'bg-[#E67E22] text-white rounded-br-[4px] border-[#d6711c]' 
+                        : 'bg-[#F9F9F9] text-gray-900 rounded-bl-[4px] border-gray-100'
+                    }`}>
                       <ChatMessageText text={message.content} role={message.role} />
                     </div>
                   </div>
                 ))}
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="inline-flex items-center rounded-3xl bg-white px-5 py-4 text-sm text-slate-900 shadow-sm border border-slate-200 gap-2">
-                      <span className="h-2.5 w-2.5 rounded-full bg-primary animate-pulse"></span>
-                      <span className="h-2.5 w-2.5 rounded-full bg-primary/80 animate-pulse delay-150"></span>
-                      <span className="h-2.5 w-2.5 rounded-full bg-primary/60 animate-pulse delay-300"></span>
-                      Wandr is thinking...
+                    <div className="bg-[#F9F9F9] border border-gray-100 text-gray-900 rounded-2xl rounded-bl-[4px] p-4 shadow-sm flex gap-1.5 items-center">
+                      <span className="w-2 h-2 bg-[#E67E22] rounded-full animate-bounce"></span>
+                      <span className="w-2 h-2 bg-[#E67E22] rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></span>
+                      <span className="w-2 h-2 bg-[#E67E22] rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></span>
                     </div>
                   </div>
                 )}
@@ -125,41 +132,42 @@ export default function ChatPage() {
             </div>
 
             {error && (
-              <div className="mb-4 rounded-3xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">{error}</div>
+              <div className="mb-4 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">{error}</div>
             )}
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <form onSubmit={handleSubmit} className="pt-4 bg-white border-t border-gray-100 flex gap-3 items-center mt-auto z-10">
               <label htmlFor="chat-input" className="sr-only">Type a message</label>
-              <input
+              <input 
                 id="chat-input"
+                type="text" 
                 value={input}
-                onChange={(event) => setInput(event.target.value)}
+                onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask me anything about your trip..."
-                className="min-h-14 flex-1 rounded-full border border-slate-200 bg-white px-5 text-sm text-slate-900 shadow-sm outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+                className="flex-1 bg-[#F9F9F9] hover:bg-gray-50 focus:bg-white text-gray-900 placeholder:text-gray-400 border border-gray-200 rounded-full px-6 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-gray-300 transition-all font-medium"
                 disabled={isLoading}
               />
-              <button
+              <button 
                 type="submit"
                 disabled={!input.trim() || isLoading}
-                className="inline-flex h-14 items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-12 h-12 shrink-0 rounded-full bg-[#E67E22] text-white flex items-center justify-center disabled:opacity-50 hover:bg-[#d6711c] transition-all hover:scale-105 shadow-md active:scale-95"
               >
-                {isLoading ? 'Sending…' : 'Send'}
+                <span className="material-symbols-outlined">send</span>
               </button>
             </form>
           </section>
 
-          <aside className="rounded-4xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-200/50">
-            <h3 className="text-xl font-bold">Why Wandr Chat?</h3>
-            <div className="mt-4 space-y-4 text-sm text-slate-600">
-              <p>Wandr's chatbot is designed to answer travel questions with context-aware suggestions, weather-aware plans, and personalized recommendations.</p>
+          <aside className="rounded-[32px] bg-white border border-gray-100 shadow-2xl shadow-gray-200/50 p-6 flex flex-col h-fit">
+            <h3 className="text-xl font-black text-gray-900 drop-shadow-sm">Why Vacay Chat?</h3>
+            <div className="mt-4 space-y-4 text-sm font-medium text-gray-500">
+              <p>Vacay's chatbot is designed to answer travel questions with context-aware suggestions, weather-aware plans, and personalized recommendations.</p>
               <p>Use it to find restaurants, discover nearby attractions, or ask for a budget-friendly itinerary suggestion.</p>
-              <div className="rounded-3xl bg-slate-50 p-4 border border-slate-200">
-                <p className="text-xs uppercase tracking-[0.2em] text-slate-400 font-semibold">Chatbot uses</p>
-                <ul className="mt-3 list-disc space-y-2 pl-4 text-slate-700">
-                  <li>Destination guidance</li>
-                  <li>Weather-aware recommendations</li>
-                  <li>Restaurant and local tips</li>
-                  <li>Trip planning questions</li>
+              <div className="rounded-[24px] bg-[#F9F9F9] p-5 border border-gray-100 mt-6">
+                <p className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Chatbot uses</p>
+                <ul className="mt-3 space-y-2 text-gray-700 font-semibold text-xs">
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#E67E22]"></span> Destination guidance</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#E67E22]"></span> Weather-aware recommendations</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#E67E22]"></span> Restaurant and local tips</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#E67E22]"></span> Trip planning questions</li>
                 </ul>
               </div>
             </div>

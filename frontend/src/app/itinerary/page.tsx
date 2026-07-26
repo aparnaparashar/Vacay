@@ -456,7 +456,7 @@ export default function ItineraryPage() {
 
   if (!itinerary || days.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-[calc(100vh-104px)] text-center text-gray-500 mt-[104px]">
+      <div className="flex flex-col items-center justify-center h-[calc(100dvh-104px)] text-center text-gray-500 mt-[104px]">
         <span className="material-symbols-outlined text-6xl mb-4 opacity-50">map</span>
         <h2 className="text-xl font-bold text-gray-700">No Itinerary Generated Yet</h2>
         <p className="text-sm mt-2">Go back and generate a trip first.</p>
@@ -465,7 +465,7 @@ export default function ItineraryPage() {
   }
 
   return (
-    <div className="relative h-[calc(100vh-104px)] w-full overflow-hidden mt-[104px] bg-[#E5E3DF]">
+    <div className="relative h-[calc(100dvh-104px)] w-full overflow-hidden mt-[104px] bg-[#E5E3DF]">
       
       {/* Background Map */}
       <div className="absolute inset-0 z-0">
