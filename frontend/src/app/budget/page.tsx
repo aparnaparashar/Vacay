@@ -22,8 +22,8 @@ const participantColors = ["bg-indigo-500", "bg-rose-500", "bg-emerald-500", "bg
 
 const makeId = () => `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
-const formatCurrency = (amount: number, currencyCode: string = 'EUR') => {
-  return new Intl.NumberFormat(undefined, { style: 'currency', currency: currencyCode }).format(amount);
+const formatCurrency = (amount: number, currencyCode: string = 'INR') => {
+  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: currencyCode }).format(amount);
 };
 
 export default function BudgetPage() {
@@ -465,7 +465,7 @@ export default function BudgetPage() {
                     type="number"
                     min="0"
                     step="0.01"
-                    placeholder="€ 0.00"
+                    placeholder="₹ 0.00"
                     className="w-full rounded-[24px] border border-[#E7E2DB] bg-[#FCFBF9] px-4 py-3 text-sm outline-none placeholder:text-gray-400 focus:border-[#101828]"
                   />
                 </label>
@@ -474,10 +474,10 @@ export default function BudgetPage() {
                   <label className="block">
                     <span className="mb-2 block text-[11px] font-black uppercase tracking-[0.18em] text-gray-400">Currency</span>
                     <select
-                      defaultValue="EUR"
+                      defaultValue="INR"
                       className="w-full rounded-[24px] border border-[#E7E2DB] bg-[#FCFBF9] px-4 py-3 text-sm font-semibold outline-none focus:border-[#101828]"
                     >
-                      <option value="EUR">EUR €</option>
+                      <option value="INR">INR ₹</option>
                     </select>
                   </label>
                   <label className="block">
@@ -589,7 +589,7 @@ export default function BudgetPage() {
                               className="w-20 rounded-lg border border-[#E7E2DB] bg-[#FCFBF9] px-2 py-1 text-sm font-bold text-right outline-none focus:border-[#101828]"
                               placeholder="0.00"
                             />
-                            <span className="text-sm font-black text-gray-900">€</span>
+                            <span className="text-sm font-black text-gray-900">₹</span>
                           </div>
                         )}
                       </div>
