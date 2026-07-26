@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useTripData } from '@/context/TripContext';
 import { usePathname } from 'next/navigation';
+import { ChatMessageText } from '@/components/ChatMessage';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -107,7 +108,7 @@ export function AICopilot() {
 
     try {
       // Pass the current trip context as part of the initial hidden prompt, or just the history
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000"}/api/chat/`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000"}/api/chat/public/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -165,11 +166,7 @@ export function AICopilot() {
                       : 'bg-surface-container text-on-surface rounded-[24px] rounded-tl-[4px] border border-outline-variant/30'
                     }`}
                 >
-                  {msg.role === 'assistant' ? (
-                    <TypewriterText text={msg.content} isNew={msg.isNew} onUpdate={scrollToBottom} />
-                  ) : (
-                    <div className="whitespace-pre-wrap break-words">{msg.content}</div>
-                  )}
+                  <ChatMessageText text={msg.content} role={msg.role} />
                 </div>
               </div>
             ))}

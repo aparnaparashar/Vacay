@@ -52,7 +52,7 @@ app.add_middleware(
 app.include_router(users.router, prefix="/api/users", tags=["users"])
 app.include_router(health.router, prefix="/api/health", tags=["health"])
 app.include_router(chat.router, prefix="/api/chat", tags=["chat"])
-app.include_router(chat_endpoint.router, prefix="/api/chat", tags=["chat"])
+app.include_router(chat_endpoint.router, prefix="/api/chat/public", tags=["chat", "public"])
 app.include_router(destinations.router, prefix="/api/destinations", tags=["destinations"])
 app.include_router(trips.router, prefix="/api/trips", tags=["trips"])
 app.include_router(itinerary.router, prefix="/api/itinerary", tags=["itinerary"])
