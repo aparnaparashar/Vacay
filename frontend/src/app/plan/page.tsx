@@ -69,9 +69,13 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
-      
+
+      if (!res.ok) {
+        throw new Error(`Backend responded with ${res.status} ${res.statusText}`);
+      }
+
       const data = await res.json();
-      
+
       setChatMessages(prev => [...prev, { role: 'assistant', content: data.reply_to_user }]);
 
       if (data.is_complete) {
@@ -87,7 +91,17 @@ export default function Home() {
         }, 1500);
       }
     } catch(err) {
-      toast.error("Vacay AI is currently unavailable.");
+      // Surface the underlying reason instead of a blanket "unavailable" so a
+      // misconfigured API URL / offline backend is diagnosable (e.g. the browser
+      // console shows a network error, an HTTP status, or a mixed-content block).
+      console.error("Chat intake failed:", err);
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+      const detail = err instanceof Error && err.message ? ` (${err.message})` : "";
+      toast.error(`Vacay AI is currently unavailable${detail}.`);
+      setChatMessages(prev => [...prev, {
+        role: 'assistant',
+        content: `I couldn't reach the planning service at ${apiBase}. Please make sure the backend is running and NEXT_PUBLIC_API_URL points to it, then try again.`
+      }]);
     } finally {
       setIsChatProcessing(false);
     }
