@@ -150,7 +150,7 @@ export default function MyTripsDashboard() {
             <div className="relative z-10 p-12 flex flex-col justify-center w-full max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-[10px] font-bold tracking-widest uppercase w-max mb-6 shadow-sm">
                 <span className="material-symbols-outlined text-[14px] text-yellow-300">psychology</span>
-                Powered by Wandr AI
+                Powered by Vacay AI
               </div>
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight tracking-tight">
                 Don't just plan. <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Orchestrate.</span>

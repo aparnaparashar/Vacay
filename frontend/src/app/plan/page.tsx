@@ -87,7 +87,7 @@ export default function Home() {
         }, 1500);
       }
     } catch(err) {
-      toast.error("Wandr AI is currently unavailable.");
+      toast.error("Vacay AI is currently unavailable.");
     } finally {
       setIsChatProcessing(false);
     }

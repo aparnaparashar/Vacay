@@ -36,9 +36,7 @@ export function TopNav() {
     { name: "Plan", href: "/plan", icon: "explore" },
     { name: "Chat", href: "/chat", icon: "chat_bubble" }
   ] : [
-    { name: "About", href: "/", icon: "info" },
-    { name: "Plan", href: "/plan", icon: "explore" },
-    { name: "Chat", href: "/chat", icon: "chat_bubble" }
+    { name: "About", href: "/", icon: "info" }
   ];
 
   const isTripView = ["/itinerary", "/flights", "/hotels", "/guide", "/budget", "/lists", "/logistics", "/files"].includes(pathname);

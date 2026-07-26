@@ -139,7 +139,7 @@ export default function InviteBuddyModal({ tripId, destination, isOpen, onClose 
                 <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-3">
                   <span className="material-symbols-outlined text-[24px]">mail</span>
                 </div>
-                <p className="text-gray-900 font-bold mb-1">No Wandr users found</p>
+                <p className="text-gray-900 font-bold mb-1">No Vacay users found</p>
                 <p className="text-gray-500 text-sm mb-4">But you can still invite them via email!</p>
                 <button
                   onClick={() => handleInvite(query)}

@@ -12,7 +12,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
-      content: "Hi there! I'm Wandr, your travel chatbot. Ask me anything about destinations, weather, restaurants, or your trip plans."
+      content: "Hi there! I'm Vacay, your travel chatbot. Ask me anything about destinations, weather, restaurants, or your trip plans."
     }
   ]);
   const [input, setInput] = useState("");
