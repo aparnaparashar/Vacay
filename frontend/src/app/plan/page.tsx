@@ -244,7 +244,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen w-full relative -mt-[104px] pt-[104px] bg-transparent">
+    <div className="min-h-screen w-full relative pt-24 bg-transparent">
 
       <div className={`relative z-10 w-full flex gap-8 pt-12 px-8 pb-12 mx-auto ${(!itinerary && !loading) ? 'items-center justify-center min-h-[calc(100vh-104px)]' : 'flex-col xl:flex-row max-w-[1400px]'}`}>
       {/* Dynamic Content Column */}
